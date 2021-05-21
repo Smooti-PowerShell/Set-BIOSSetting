@@ -10,7 +10,8 @@
         5 - Invalid Parameter
         6 - Access Denied - (Check that the BIOS password is correct)
     .NOTES
-        Created by: Robert Owens
+        Author: Robert Owens
+        Created: December 30, 2020
 #>
 param (
     [Parameter(mandatory=$true)]
