@@ -1,5 +1,5 @@
 function Get-Manufacturer {
-	$manufacturer = (gwmi Win32_Computersystem).manufacturer
+	$manufacturer = (Get-WmiObject Win32_Computersystem).manufacturer
 	try {
 		if ($manufacturer -like "*HP*" -or $manufacturer -like "*hewlet*") {
 			return "HP"
