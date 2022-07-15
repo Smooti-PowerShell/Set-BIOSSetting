@@ -1,41 +1,23 @@
 function Get-Manufacturer {
 	$manufacturer = (Get-WmiObject Win32_Computersystem).manufacturer
-	try {
-		if ($manufacturer -like "*HP*" -or $manufacturer -like "*hewlet*") {
-			return "HP"
-		}
-		elseif ($manufacturer -like "*dell*") {
-			return "DELL"
-		}
-		elseif ($manufacturer -like "*lenovo*") {
-			return "Lenovo"
-		}
-		else {
-			{
-				throw "$($manufacturer) not supported."
-			}
-		}
-	}
-	catch {
-		Write-Host "$($_.Exception.Message)" -Foreground red -Background Black
-	}
+	return $manufacturer
 }
 
 function Get-BIOSSettings {
-	switch (Get-Manufacturer) {
-		"HP" {
-			$settings = Get-WmiObject -Namespace root\HP\InstrumentedBIOS -Class HP_BIOSEnumeration | Select-Object Name, Value
-			return $settings
-		}
-		"DELL" {
-			$settings = Get-DellBiosSettings
-			return $settings
-		}
-		"Lenovo" {
-			$settings = Get-WmiObject -Namespace root\wmi -Class Lenovo_BiosSetting | Select-Object CurrentSetting
-			return $settings
-		}
+	if (Get-Manufacturer -like "*HP*") {
+		$settings = Get-WmiObject -Namespace root\HP\InstrumentedBIOS -Class HP_BIOSEnumeration | Select-Object Name, Value
 	}
+	elseif (Get-Manufacturer -like "*DELL*") {
+		$settings = Get-DellBiosSettings
+	}
+	elseif (Get-Manufacturer -like "*lenovo*") {
+		$settings = Get-WmiObject -Namespace root\wmi -Class Lenovo_BiosSetting | Select-Object CurrentSetting
+	}
+	else {
+		throw "$(Get-Manufacturer) not supported."
+	}
+
+	return $settings
 }
 
 function Set-HPBIOSSetting {
