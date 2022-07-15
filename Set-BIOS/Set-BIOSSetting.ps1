@@ -27,15 +27,16 @@ param (
 $ErrorActionPreference = "SilentlyContinue"
 Import-Module -Name "$($PSScriptRoot)\Modules\MasterFunctions"
 
-switch (Get-Manufacturer) {
-	"HP" {
-		Set-HPBIOSSetting -setting $Setting -value $Value -Password $Password
-	}
-	"DELL" {
-		Import-Module -Name "$($PSScriptRoot)\Modules\DellBIOSProvider"
-		Set-DellBIOSSetting -Setting $Setting -value $Value -Password $Password
-	}
-	"Lenovo" {
-		Set-LenovoBIOSSetting -Setting $Setting -value $Value -Password $Password
-	}
+if (Get-Manufacturer -like "*HP*") {
+	Set-HPBIOSSetting -setting $Setting -value $Value -Password $Password
+}
+elseif (Get-Manufacturer -like "*DELL*") {
+	Import-Module -Name "$($PSScriptRoot)\Modules\DellBIOSProvider"
+	Set-DellBIOSSetting -Setting $Setting -value $Value -Password $Password
+}
+elseif (Get-Manufacturer -like "*Lenovo*") {
+	Set-LenovoBIOSSetting -Setting $Setting -value $Value -Password $Password
+}
+else {
+	Throw "$(Get-Manufacturer) not supported."
 }
