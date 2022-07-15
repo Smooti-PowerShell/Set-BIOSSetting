@@ -1,3 +1,4 @@
+#Requires -modules ./Modules/MasterFunctions/MasterFunctions.psm1
 <#
     .DESCRIPTION
         Automatically configure BIOS settings

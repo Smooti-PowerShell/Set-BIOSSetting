@@ -1,3 +1,5 @@
+$ErrorActionPreference = "SilentlyContinue"
+
 function Get-Manufacturer {
 	$manufacturer = (Get-WmiObject Win32_Computersystem).manufacturer
 	return $manufacturer
