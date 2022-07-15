@@ -44,6 +44,13 @@ function Set-HPBIOSSetting {
 		[string]$setting = $null,
 		[string]$Value = $null
 	)
+
+	# * Convert secure-string to plain text
+	if ($null -ne $Password) {
+		$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
+		$Password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+	}
+
 	$check_passwordset = (Get-WmiObject -Namespace root/hp/instrumentedBIOS -Class hp_biossetting | Where-Object-Object { $_.Name -eq "Setup Password" }).IsSet
 	$bios = Get-WmiObject -NameSpace root/hp/instrumentedBIOS -Class HP_BIOSSettingInterface
 
@@ -83,10 +90,17 @@ function Set-HPBIOSSetting {
 
 function Set-DellBIOSSetting {
 	param(
-		[securestring]$Password,
+		[securestring]$Password = $null,
 		[string]$setting = $null,
 		[string]$Value = $null
 	)
+
+	# * Convert secure-string to plain text
+	if ($null -ne $Password) {
+		$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
+		$Password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+	}
+
 	try {
 		$check_passwordset = (Get-DellBiosSettings | Where-Object Attribute -EQ "IsAdminPasswordSet").CurrentValue
 		$attr_local = (Get-DellBiosSettings | Where-Object Attribute -EQ "$($setting)").PSPath.Replace("DellBIOSProvider\DellSmbiosProv::", "")
@@ -106,10 +120,17 @@ function Set-DellBIOSSetting {
 
 function Set-LenovoBIOSSetting {
 	param(
-		[securestring]$Password,
+		[securestring]$Password = $null,
 		[string]$setting = $null,
 		[string]$Value = $null
 	)
+
+	# * Convert secure-string to plain text
+	if ($null -ne $Password) {
+		$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
+		$Password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+	}
+
 	$check_passwordset = (Get-WmiObject -Namespace root/wmi -Class Lenovo_BiosPasswordSettings | Where-Object-Object { $_.Name -eq "Setup Password" }).IsSet
 	$bios = Get-WmiObject -NameSpace root/wmi -Class LenovoSetBiosSetting
 	$save_bios = (Get-WmiObject -Namespace root/wmi -Class Lenovo_SaveBiosSettings)
