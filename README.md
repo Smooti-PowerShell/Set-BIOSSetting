@@ -98,6 +98,12 @@
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+---
+**NOTE**
+Check if Bitlocker has been configured on the system and temporarily disable it. If Bitlocker detects any BIOS changes on reboot and it is not temporarily disabled, it will prompt for the BitLocker key.
+
+---
+
 <!-- CONTRIBUTING -->
 
 ## Contributing
